@@ -12,15 +12,17 @@ b = np.random.rand(NEURON_NUM)
 benchmark = benchmarks.cos()
 
 
-def loss(Y):
-	return 1. * np.sum(map(lambda y: benchmark.getValue(y), Y)) / len(Y) + REGULARIZATION * np.sum(W**2)
+# def loss(Y):
+# 	return 1. * np.sum(map(lambda y: benchmark.getValue(y), Y)) / len(Y) + REGULARIZATION * np.sum(W**2)
+def loss(vals):
+	return 1. * np.sum(vals) / len(vals) + REGULARIZATION * np.sum(W**2)
 
 difference = np.random.choice([-1, 1], NEURON_NUM)
 prior_vals = None
 b_delta = None
 W_delta = None
 
-for i in xrange(1, 1001):
+for i in xrange(1, 10001):
 	# forward prop
 	Y = W * x + b
 
@@ -57,3 +59,4 @@ for i in xrange(1, 1001):
 	# verbose
 	print "%d generation: Loss: %f" % (i, L)
 print W*x + b
+print np.array(map(lambda y: benchmark.getValue(y), W*x + b))
