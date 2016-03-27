@@ -2,7 +2,7 @@ import numpy as np
 import benchmarks
 import pprint, sys
 
-LEARNING_RATE = 1E-5
+LEARNING_RATE = 1E-4
 REGULARIZATION = 0.05
 
 neuron_nums = [5, 20, 10]

@@ -6,7 +6,6 @@ LEARNING_RATE = 1E-3
 REGULARIZATION = 0.05
 
 neuron_nums = [5, 10, 100]
-delta = 1E-10
 
 x = np.random.rand(neuron_nums[0]) * 20 - 10
 W1 = np.random.rand(neuron_nums[0])
