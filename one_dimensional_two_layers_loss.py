@@ -3,8 +3,8 @@ import benchmarks
 
 LEARNING_RATE = 1E-3
 REGULARIZATION = 0.05
-FIRST_LAYER_NEURON_NUM = 5
-SECOND_LAYER_NEURON_NUM = 10
+FIRST_LAYER_NEURON_NUM = 10
+SECOND_LAYER_NEURON_NUM = 100
 delta = 1E-10
 
 benchmark = benchmarks.cos()
@@ -43,18 +43,19 @@ for i in xrange(1, 10001):
 
 	# backward prop
 	if b2_delta is not None:
-		Grad_b2 = 1. / SECOND_LAYER_NEURON_NUM * np.sign(difference) * np.sign(b2_delta)
-		Grad_W2 = np.repeat(Y1.reshape(1, FIRST_LAYER_NEURON_NUM), SECOND_LAYER_NEURON_NUM, axis=0) * Grad_b2.reshape(SECOND_LAYER_NEURON_NUM, 1) * np.sign(Grad_W2)
+		Grad_b2 = np.sign(difference) * np.sign(b2_delta)
+		Grad_W2 = np.sign(difference.reshape(SECOND_LAYER_NEURON_NUM, 1)) * np.sign(W2_delta)
 	else:
-		Grad_b2 = 1. / SECOND_LAYER_NEURON_NUM * difference
-		Grad_W2 = np.repeat(Y1.reshape(1, FIRST_LAYER_NEURON_NUM), SECOND_LAYER_NEURON_NUM, axis=0) * Grad_b2.reshape(SECOND_LAYER_NEURON_NUM, 1)
+		Grad_b2 = np.sign(difference)
+		Grad_W2 = np.sign(difference.reshape(SECOND_LAYER_NEURON_NUM, 1)) * np.sign(W2)
+	Diff_Y1 = np.sum(1. / SECOND_LAYER_NEURON_NUM * np.sign(difference.reshape(SECOND_LAYER_NEURON_NUM, 1)) * np.sign(W2), axis = 0)
 
 	if b1_delta is not None:
-		Grad_b1 = 1. * np.sum(W2 * Grad_b2.reshape(SECOND_LAYER_NEURON_NUM, 1), axis=0) * np.sign(b1_delta)
-		Grad_W1 = Grad_b1 * x * np.sign(W1_delta)
+		Grad_b1 = np.sign(Diff_Y1) * np.sign(b1_delta)
+		Grad_W1 = np.sign(Diff_Y1) * np.sign(W1_delta)
 	else:
-		Grad_b1 = 1. * np.sum(W2 * Grad_b2.reshape(SECOND_LAYER_NEURON_NUM, 1), axis=0)
-		Grad_W1 = Grad_b1 * x
+		Grad_b1 = np.sign(Diff_Y1)
+		Grad_W1 = np.sign(Diff_Y1) * np.sign(W1)
 	
 
 	# calculate deltas

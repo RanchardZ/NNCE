@@ -3,7 +3,7 @@ import benchmarks
 
 LEARNING_RATE = 0.05
 REGULARIZATION = 0.05
-NEURON_NUM = 5
+NEURON_NUM = 10
 
 x = np.random.rand(NEURON_NUM) * 20 - 10
 W = np.random.rand(NEURON_NUM)
