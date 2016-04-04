@@ -96,8 +96,3 @@ class EvaluateLayer(object):
 
 	def backward(self):
 		return self.diffsBack
-
-
-
-
-
