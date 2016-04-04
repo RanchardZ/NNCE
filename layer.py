@@ -86,11 +86,29 @@ class EvaluateLayer(object):
 
 	def forward(self, inputsForth):
 		self.inputsForth = inputsForth
-		self.curFitValues = np.array(map(lambda x: self.benchmark.getValue(x), inputsForth))
+		self.curFitValues = np.array(map(lambda x: self.benchmark.evaluate(x), inputsForth))
 		try:
 			self.diffsBack = self.curFitValues - self.priFitValues
 		except:
 			self.diffsBack = np.random.choice([-1, 1], len(inputsForth))
+		self.priFitValues = self.curFitValues
+		return self.curFitValues
+
+	def backward(self):
+		return self.diffsBack
+
+class EvaluateLayer2(object):
+
+	def __init__(self, benchmark):
+		self.benchmark = benchmark
+
+	def forward(self, inputsForth):
+		self.inputsForth = inputsForth
+		self.curFitValues = np.array(map(lambda x: self.benchmark.evaluate(x), inputsForth.T))
+		try:
+			self.diffsBack = self.curFitValues - self.priFitValues
+		except:
+			self.diffsBack = np.random.choice([-1, 1], len(self.curFitValues))
 		self.priFitValues = self.curFitValues
 		return self.curFitValues
 
