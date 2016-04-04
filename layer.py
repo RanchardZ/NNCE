@@ -86,7 +86,7 @@ class EvaluateLayer(object):
 
 	def forward(self, inputsForth):
 		self.inputsForth = inputsForth
-		self.curFitValues = np.array(map(lambda x: self.benchmark.getValue(x), inputsForth))
+		self.curFitValues = np.array(map(lambda x: self.benchmark.evaluate(x), inputsForth))
 		try:
 			self.diffsBack = self.curFitValues - self.priFitValues
 		except:
