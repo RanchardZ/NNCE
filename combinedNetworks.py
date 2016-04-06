@@ -7,14 +7,19 @@ from loss import averageLoss
 
 import numpy as np
 sphere = Sphere()
+rosenbrock = Rosenbrock()
+
+popNum = 20
+dimNum = 50
 
 problemConfig = {
-	"popNum": 3,
-	"dimNum": 5,
+	"popNum": popNum,
+	"dimNum": dimNum,
 	"bound": [-10, 10],
-	"benchmark": sphere,
-	"structure": [3, 6, 6, 5, 5, 5, 3],
-	"iterationNum": 30000
+	"benchmark": Rosenbrock,
+	"structure": [popNum, popNum, popNum],
+	"iterationNum": 10000,
+	"learningRate": 1E-5,
 }
 
 class Web(object):
@@ -32,9 +37,11 @@ class Web(object):
 		structure = config['structure']
 		popNum = config['popNum']
 		dimNum = config['dimNum']
+		learningRate = config['learningRate']
 		web = []
 		unitConfig = {
-			"structure": structure
+			"structure": structure,
+			"learningRate": learningRate
 		}
 		for i in range(dimNum):
 			web.append(UnitNetwork(unitConfig))
@@ -68,6 +75,8 @@ class Web(object):
 			self.outputs[i] = unitNetwork.forward(inputsForth)
 
 	def evaluate(self):
+		# for row in self.outputs:
+		# 	np.random.shuffle(row)
 		fitValues = self.evl.forward(self.outputs)
 		self.diffsBack = self.evl.backward()
 		return fitValues

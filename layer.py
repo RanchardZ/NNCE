@@ -1,10 +1,11 @@
 import numpy as np 
 from params import initUniformOneDimArray, initUniformTwoDimArray
-from config import learningRate
+# from config import learningRate
 
 class FullyConnectedHiddenLayer(object):
 
-	def __init__(self, preNeuronNum, curNeuronNum, lower = -0.5, upper = 0.5):
+	def __init__(self, preNeuronNum, curNeuronNum, learningRate, lower = -0.5, upper = 0.5):
+		self.learningRate = learningRate
 		self.preNeuronNum = preNeuronNum
 		self.curNeuronNum = curNeuronNum
 		
@@ -34,8 +35,8 @@ class FullyConnectedHiddenLayer(object):
 
 
 	def update(self):
-		self.deltaOfb = -learningRate * self.gradsOfb
-		self.deltaOfW = -learningRate * self.gradsOfW
+		self.deltaOfb = -self.learningRate * self.gradsOfb
+		self.deltaOfW = -self.learningRate * self.gradsOfW
 
 		self.b += self.deltaOfb
 		self.W += self.deltaOfW
@@ -43,7 +44,8 @@ class FullyConnectedHiddenLayer(object):
 
 class FullyConnectedFirstLayer(object):
 
-	def __init__(self, neuronNum, lower = -0.5, upper = 0.5):
+	def __init__(self, neuronNum, learningRate, lower = -0.5, upper = 0.5):
+		self.learningRate = learningRate
 		self.neuronNum = neuronNum
 
 		self.b = initUniformOneDimArray(neuronNum, lower, upper)
@@ -67,16 +69,16 @@ class FullyConnectedFirstLayer(object):
 		return
 
 	def update(self):
-		self.deltaOfb = -learningRate * self.gradsOfb
-		self.deltaOfW = -learningRate * self.gradsOfW
+		self.deltaOfb = -self.learningRate * self.gradsOfb
+		self.deltaOfW = -self.learningRate * self.gradsOfW
 
 		self.b += self.deltaOfb
 		self.W += self.deltaOfW
 
 class FullyConnectedLastLayer(FullyConnectedHiddenLayer):
 
-	def __init__(self, preNeuronNum, curNeuronNum):
-		super(FullyConnectedLastLayer, self).__init__(preNeuronNum, curNeuronNum)
+	def __init__(self, preNeuronNum, curNeuronNum, learningRate):
+		super(FullyConnectedLastLayer, self).__init__(preNeuronNum, curNeuronNum, learningRate)
 
 
 class EvaluateLayer(object):

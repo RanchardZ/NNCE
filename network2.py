@@ -14,11 +14,12 @@ class UnitNetwork(object):
 	
 	@staticmethod
 	def initNetwork(config):
+		learningRate = config["learningRate"]
 		structure = config["structure"]
 		network = []
-		network.append(FullyConnectedFirstLayer(structure[0]))			
+		network.append(FullyConnectedFirstLayer(structure[0], learningRate))			
 		for (preNueronNum, curNeuronNum) in zip(structure[:-1], structure[1:]):
-			network.append(FullyConnectedHiddenLayer(preNueronNum, curNeuronNum))
+			network.append(FullyConnectedHiddenLayer(preNueronNum, curNeuronNum, learningRate))
 		return network
 
 	def forward(self, inputsForth):
