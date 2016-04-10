@@ -116,3 +116,37 @@ class EvaluateLayer2(object):
 
 	def backward(self):
 		return self.diffsBack
+
+class RandomEvaluateLayer(object):
+
+	def __init__(self, benchmark):
+		self.benchmark = benchmark
+
+	def forward(self, inputsForth):
+		self.inputsForth = inputsForth
+		# shuffle the inputs
+		rowNum, colNum = inputsForth.shape
+		colIndexes = np.repeat(np.arange(colNum).reshape(1, colNum), rowNum, axis=0)
+		for colIndex in colIndexes:
+			np.random.shuffle(colIndex)
+		mappedInputs = np.zeros_like(inputsForth)
+		for i in range(rowNum):
+			for j in range(colNum):
+				mappedInputs[i, j] = inputsForth[i, colIndexes[i, j]]
+		# evaluate
+		mappedCurFitValues = np.array(map(lambda x: self.benchmark.evaluate(x), mappedInputs.T))
+		self.curFitValues = np.zeros_like(inputsForth)
+		for i in range(rowNum):
+			for j in range(colNum):
+				self.curFitValues[i, j] = mappedCurFitValues[colIndexes[i, j]]
+		try:
+			self.diffsBack = self.curFitValues - self.priFitValues
+		except:
+			self.diffsBack = np.random.choice([-1, 1], inputsForth.shape)
+		self.priFitValues = self.curFitValues
+		return mappedCurFitValues
+
+	def backward(self):
+		return self.diffsBack
+
+
